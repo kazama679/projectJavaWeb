@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="flex min-h-screen text-gray-700">
+<div th:replace="layout/sidebar"></div>
+<main class="flex-1 p-6 overflow-y-auto">
+    <!-- Header Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-500 text-sm">TOTAL REVENUE</p>
+            <h2 class="text-xl font-bold">$12,426</h2>
+            <p class="text-green-500 text-sm font-medium">+36%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-500 text-sm">TOTAL PRODUCT</p>
+            <h2 class="text-xl font-bold">1,500</h2>
+            <p class="text-red-500 text-sm font-medium">-14%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-500 text-sm">TOTAL INVOICE</p>
+            <h2 class="text-xl font-bold">84,382</h2>
+            <p class="text-green-500 text-sm font-medium">+36%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-500 text-sm">TOTAL USER</p>
+            <h2 class="text-xl font-bold">33,493</h2>
+            <p class="text-green-500 text-sm font-medium">+36%</p>
+        </div>
+    </div>
+
+    <!-- Sales Report + Traffic Sources -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div class="col-span-2 bg-white p-4 rounded shadow">
+            <div class="flex justify-between mb-4">
+                <h3 class="font-semibold">Sales Report</h3>
+                <div class="space-x-2 text-sm">
+                    <button class="px-2 py-1 bg-gray-200 rounded">12 Months</button>
+                    <button class="px-2 py-1 hover:bg-gray-200 rounded">6 Months</button>
+                    <button class="px-2 py-1 hover:bg-gray-200 rounded">30 Days</button>
+                    <button class="px-2 py-1 hover:bg-gray-200 rounded">7 Days</button>
+                    <button class="px-2 py-1 bg-black text-white rounded">Export PDF</button>
+                </div>
+            </div>
+            <div class="h-48 bg-purple-50 rounded"></div>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <div class="flex justify-between">
+                <h3 class="font-semibold">Traffic Sources</h3>
+                <span class="text-sm text-gray-500">Last 7 Days</span>
+            </div>
+            <div class="mt-4 space-y-3">
+                <div>
+                    <p class="text-sm">Direct</p>
+                    <div class="bg-purple-500 h-2 w-3/4 rounded"></div>
+                </div>
+                <div>
+                    <p class="text-sm">Referral</p>
+                    <div class="bg-purple-400 h-2 w-1/2 rounded"></div>
+                </div>
+                <div>
+                    <p class="text-sm">Social Media</p>
+                    <div class="bg-purple-300 h-2 w-1/4 rounded"></div>
+                </div>
+                <div>
+                    <p class="text-sm">Twitter</p>
+                    <div class="bg-purple-200 h-2 w-1/6 rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions + Customers -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="col-span-2 bg-white p-4 rounded shadow">
+            <div class="flex justify-between mb-2">
+                <h3 class="font-semibold">Transactions</h3>
+                <a href="#" class="text-sm text-blue-500">See All Transactions</a>
+            </div>
+            <div class="divide-y">
+                <div class="flex justify-between py-2">
+                    <span class="text-green-500">● Completed</span>
+                    <span>Visa ****4831</span>
+                    <span>$182.94</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-green-500">● Completed</span>
+                    <span>Mastercard ****6442</span>
+                    <span>$99.00</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-yellow-500">● Pending</span>
+                    <span>Account ****882</span>
+                    <span>$249.94</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-red-500">● Canceled</span>
+                    <span>Amex ****5666</span>
+                    <span>$199.24</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="font-semibold mb-2">Recent Customers</h3>
+            <ul class="space-y-3 text-sm">
+                <li class="flex justify-between">
+                    <span>Jenny Wilson</span>
+                    <span>$11,234</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Devon Lane</span>
+                    <span>$11,159</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Jane Cooper</span>
+                    <span>$10,483</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Dianne Russell</span>
+                    <span>$9,084</span>
+                </li>
+            </ul>
+            <div class="mt-4 text-center">
+                <a href="#" class="text-blue-500 text-sm">SEE ALL CUSTOMERS</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

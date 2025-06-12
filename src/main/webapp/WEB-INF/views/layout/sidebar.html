@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<aside th:fragment="sidebar" class="w-64 bg-gray-100 p-4 flex flex-col justify-between border-r">
+  <div>
+    <h2 class="text-2xl font-bold text-center mb-8">Mobile <span class="text-orange-500">SHOP</span></h2>
+    <nav class="space-y-2">
+      <a href="/dashboard"
+         th:class="${#httpServletRequest.requestURI.equals('/dashboard')} ?
+             'flex items-center gap-2 p-2 bg-orange-100 text-orange-500 rounded' :
+             'flex items-center gap-2 p-2 hover:bg-gray-200 rounded'">
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+      </a>
+      <a href="/customers"
+         th:class="${#httpServletRequest.requestURI.equals('/customers')} ?
+             'flex items-center gap-2 p-2 bg-orange-100 text-orange-500 rounded' :
+             'flex items-center gap-2 p-2 hover:bg-gray-200 rounded'">
+        <i class="fa-solid fa-users"></i> Customer
+      </a>
+      <a href="/products"
+         th:class="${#httpServletRequest.requestURI.equals('/products')} ?
+             'flex items-center gap-2 p-2 bg-orange-100 text-orange-500 rounded' :
+             'flex items-center gap-2 p-2 hover:bg-gray-200 rounded'">
+        <i class="fa-solid fa-laptop-code"></i> Products
+      </a>
+      <a href="/invoices"
+         th:class="${#httpServletRequest.requestURI.equals('/invoices')} ?
+             'flex items-center gap-2 p-2 bg-orange-100 text-orange-500 rounded' :
+             'flex items-center gap-2 p-2 hover:bg-gray-200 rounded'">
+        <i class="fa-regular fa-file-lines ml-[3px]"></i> Invoices
+      </a>
+    </nav>
+  </div>
+  <a href="login" class="flex items-center gap-2 text-sm p-2 hover:bg-gray-200 rounded">
+    <i class="fa-solid fa-arrow-right-to-bracket mt-[2px]"></i> Sign out
+  </a>
+</aside>
+</body>
+</html>
