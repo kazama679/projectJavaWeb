@@ -9,9 +9,9 @@ import javax.servlet.http.HttpSession;
 public class CustomerController {
     @GetMapping("/customers")
     public String list(HttpSession session) {
-        if (session.getAttribute("admin") == null) {
-            return "redirect:/login";
-        }
+//        if (session.getAttribute("admin") == null) {
+//            return "redirect:/login";
+//        }
         return "customer/list";
     }
 }

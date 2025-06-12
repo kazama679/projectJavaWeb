@@ -47,9 +47,9 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session) {
-        if (session.getAttribute("admin") == null) {
-            return "redirect:/login";
-        }
+//        if (session.getAttribute("admin") == null) {
+//            return "redirect:/login";
+//        }
         return "admin/dashboard";
     }
 }
