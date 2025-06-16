@@ -1,21 +1,23 @@
 package com.data.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class ProductDTO {
     private int id;
-//    @NotBlank(message = "Tên sản phẩm không được để trống!")
+    @NotBlank(message = "Tên sản phẩm không được để trống!")
     private String name;
-//    @NotBlank(message = "Tên nhãn hàng không được để trống!")
+    @NotBlank(message = "Tên nhãn hàng không được để trống!")
     private String brand;
-//    @NotBlank(message = "Giá sản phẩm không được để trống!")
+    @Min(value = 0, message = "Giá sản phẩm không được nhỏ hơn 0!")
     private double price;
-//    @NotBlank(message = "Số lượng sản phẩm không được để trống!")
+    @Min(value = 1, message = "Số lượng sản phẩm phải lớn hơn 0!")
     private int stock;
-//    @NotBlank(message = "Ảnh sản phẩm không được để trống!")
-    private String image;
+    private MultipartFile image;
     private boolean status;
 }

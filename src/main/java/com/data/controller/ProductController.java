@@ -8,6 +8,7 @@ import com.data.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,24 +29,46 @@ public class ProductController {
     private Cloudinary cloudinary;
 
     @GetMapping("/products")
-    public String list(@RequestParam(value = "searchProduct", required = false) String search, HttpSession session, Model model) {
+    public String list(
+            @RequestParam(value = "searchProduct", required = false) String search,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            HttpSession session,
+            Model model
+    ) {
 //        if (session.getAttribute("admin") == null) {
 //            return "redirect:/login";
 //        }
-        List<Product> products;
+        List<Product> allProducts;
         if (search != null && !search.trim().isEmpty()) {
-            products = productService.findByBrand(search);
+            allProducts = productService.findByBrand(search);
         } else {
-            products = productService.findAll();
+            allProducts = productService.findAll();
         }
-        model.addAttribute("products", products);
+        model.addAttribute("products", allProducts);
         model.addAttribute("searchProduct", search);
         model.addAttribute("productDTO", new ProductDTO());
+        model.addAttribute("currentPage", page);
         return "product/list";
     }
 
     @PostMapping("/products")
-    public String save(@Valid @ModelAttribute("product") Product product, Model model) {
+    public String save(@Valid @ModelAttribute("productDTO") ProductDTO product,
+                       BindingResult result,
+                       Model model) {
+        if(productService.existsByName(product.getName())) {
+            result.rejectValue("name", "error.product", "Tên sản phẩm đã tồn tại!");
+        }
+        if (product.getImage() == null || product.getImage().isEmpty()) {
+            result.rejectValue("image", "error.product", "Vui lòng chọn ảnh sản phẩm!");
+        }
+        if (result.hasErrors()) {
+            List<Product> products = productService.findAll();
+            model.addAttribute("products", products);
+            model.addAttribute("searchProduct", null);
+            model.addAttribute("hideModal", "yes");
+            return "product/list";
+        }
+
         Product productNew = new Product();
         productNew.setId(product.getId());
         productNew.setName(product.getName());
@@ -59,7 +82,17 @@ public class ProductController {
             throw new RuntimeException(e);
         }
         productNew.setImage(upload.get("url").toString());
-        productService.save(productNew);
+        boolean check = productService.save(productNew);
+        if( !check) {
+            model.addAttribute("errorAdd", "Lỗi khi lưu sản phẩm!");
+            return "product/list";
+        }
+        return "redirect:/products";
+    }
+
+    @GetMapping("products/delete")
+    public String deleteCourse(@RequestParam("id") int id) {
+        productService.delete(id);
         return "redirect:/products";
     }
 }

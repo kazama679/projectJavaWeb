@@ -37,26 +37,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="border-t">
-                <td class="px-4 py-2">1</td>
-                <td class="px-4 py-2">Leanne Graham</td>
-                <td class="px-4 py-2">Sincere@gmail.com</td>
-                <td class="px-4 py-2">0987654321</td>
-                <td class="px-4 py-2">Alabama</td>
+            <tr class="border-t" th:each="customer : ${customers}">
+                <td th:text="customer.id" class="px-4 py-2">1</td>
+                <td th:text="customer.name" class="px-4 py-2">Leanne Graham</td>
+                <td th:text="customer.email" class="px-4 py-2">Sincere@gmail.com</td>
+                <td th:text="customer.phone" class="px-4 py-2">0987654321</td>
+                <td th:text="customer.address" class="px-4 py-2">Alabama</td>
                 <td class="px-4 py-2 space-x-2">
                     <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can cursor-pointer"></i></button>
                     <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil cursor-pointer"></i></button>
-                </td>
-            </tr>
-            <tr class="border-t" >
-                <td class="px-4 py-2">1</td>
-                <td class="px-4 py-2">Leanne Graham</td>
-                <td class="px-4 py-2">Sincere@gmail.com</td>
-                <td class="px-4 py-2">0987654321</td>
-                <td class="px-4 py-2">Alabama</td>
-                <td class="px-4 py-2 space-x-2">
-                    <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
-                    <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
                 </td>
             </tr>
             </tbody>

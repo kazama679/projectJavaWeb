@@ -14,5 +14,10 @@ public class InvoiceController {
 //        }
         return "invoice/list";
     }
+
+    @GetMapping("/invoices/add")
+    public String list() {
+        return "invoice/add";
+    }
 }
 

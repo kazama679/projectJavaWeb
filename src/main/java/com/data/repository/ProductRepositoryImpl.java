@@ -1,6 +1,7 @@
 package com.data.repository;
 
 import com.data.entity.Product;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +18,64 @@ public class ProductRepositoryImpl implements ProductRepository{
     public List<Product> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Product order by id", Product.class).getResultList();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
     public Product findById(int id) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Product.class, id);
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public boolean save(Product product) {
-        return false;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.saveOrUpdate(product);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean update(Product product) {
-        return false;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.saveOrUpdate(product);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        try (Session session = sessionFactory.openSession()) {
+            Product product = session.get(Product.class, id);
+            if (product != null) {
+                session.beginTransaction();
+                session.delete(product);
+                session.getTransaction().commit();
+                return true;
+            }
+            return false;
+
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -48,8 +84,21 @@ public class ProductRepositoryImpl implements ProductRepository{
             return session.createQuery("from Product where brand like :name", Product.class)
                     .setParameter("name", "%" + name + "%")
                     .getResultList();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
+            e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+            String normalized = name.trim().toLowerCase().replaceAll("\\s+", " ");
+            return session.createQuery("select count(c) from Product c where c.name = :name", Long.class)
+                    .setParameter("name", normalized).uniqueResult() > 0;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

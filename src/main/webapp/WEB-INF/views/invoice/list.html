@@ -16,121 +16,167 @@
     </h1>
   </div>
 
-  <div class="flex justify-between items-center mb-4">
-    <button class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 cursor-pointer">Add Invoice</button>
-    <div class="relative">
-      <input type="text" placeholder="Search here ..." class="border px-4 py-2 rounded pl-10">
-      <span class="absolute left-3 top-1/2 -translate-y-1/2 material-icons text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+  <div>
+    <div class="flex justify-between items-center mb-4">
+      <button id="openAdd" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 cursor-pointer">Add Invoice</button>
+      <div class="relative">
+        <input type="text" placeholder="Search here ..." class="border px-4 py-2 rounded pl-10">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 material-icons text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+      </div>
     </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="px-4 py-2">STT</th>
+          <th class="px-4 py-2">Customer Name</th>
+          <th class="px-4 py-2">Create At</th>
+          <th class="px-4 py-2">Status</th>
+          <th class="px-4 py-2">Total Amount</th>
+          <th class="px-4 py-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#BBB5FF] border border-[#4000FF] text-[#4000FF] text-sm font-semibold px-4 py-1 rounded">
+              CONFIRMING
+          </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can cursor-pointer"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil cursor-pointer"></i></button>
+            <button id="openShow" class="text-blue-500 hover:text-blue-700 material-icons align-middle"><i class="fa-solid fa-eye cursor-pointer"></i></i></button>
+          </td>
+        </tr>
+
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#FFE3B5] border border-[#FF9D00] text-[#FF9D00] text-sm font-semibold px-4 py-1 rounded">
+              PENDING
+            </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
+          </td>
+        </tr>
+
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#B5FFF8] border border-[#00BBFF] text-[#00BBFF] text-sm font-semibold px-4 py-1 rounded">
+              SHIPPING
+            </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
+          </td>
+        </tr>
+
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#B5FFB8] border border-[#00A613] text-[#00A613] text-sm font-semibold px-4 py-1 rounded">
+              COMPLETED
+            </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
+          </td>
+        </tr>
+
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#FFD3D3] border border-[#FF0000] text-[#FF0000] text-sm font-semibold px-4 py-1 rounded">
+              CANCELED
+            </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
+          </td>
+        </tr>
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Leanne Graham</td>
+          <td class="px-4 py-2">12/06/2025</td>
+          <td class="px-4 py-2">
+            <div class="inline-block bg-[#FFD3D3] border border-[#FF0000] text-[#FF0000] text-sm font-semibold px-4 py-1 rounded">
+              CANCELED
+            </div>
+          </td>
+          <td class="px-4 py-2">1,200 $</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 flex justify-end items-center space-x-1">
+      <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-left"></i></button>
+      <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">1</button>
+      <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">2</button>
+      <button class="px-3 py-1 bg-orange-500 text-white rounded cursor-pointer">3</button>
+      <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">4</button>
+      <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">5</button>
+      <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full border-collapse">
-      <thead class="bg-gray-100 text-left">
-      <tr>
-        <th class="px-4 py-2">STT</th>
-        <th class="px-4 py-2">Customer Name</th>
-        <th class="px-4 py-2">Create At</th>
-        <th class="px-4 py-2">Status</th>
-        <th class="px-4 py-2">Total Amount</th>
-        <th class="px-4 py-2">Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="border-t">
-        <td class="px-4 py-2">1</td>
-        <td class="px-4 py-2">Leanne Graham</td>
-        <td class="px-4 py-2">12/06/2025</td>
-        <td class="px-4 py-2">
-          <div class="inline-block bg-[#BBB5FF] border border-[#4000FF] text-[#4000FF] text-sm font-semibold px-4 py-1 rounded">
-            CONFIRMING
-        </div>
-        </td>
-        <td class="px-4 py-2">1,200 $</td>
-        <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can cursor-pointer"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil cursor-pointer"></i></button>
-          <button class="text-blue-500 hover:text-blue-700 material-icons align-middle"><i class="fa-solid fa-eye cursor-pointer"></i></i></button>
-        </td>
-      </tr>
-
-      <tr class="border-t">
-        <td class="px-4 py-2">1</td>
-        <td class="px-4 py-2">Leanne Graham</td>
-        <td class="px-4 py-2">12/06/2025</td>
-        <td class="px-4 py-2">
-          <div class="inline-block bg-[#FFE3B5] border border-[#FF9D00] text-[#FF9D00] text-sm font-semibold px-4 py-1 rounded">
-            PENDING
-          </div>
-        </td>
-        <td class="px-4 py-2">1,200 $</td>
-        <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
-        </td>
-      </tr>
-
-      <tr class="border-t">
-        <td class="px-4 py-2">1</td>
-        <td class="px-4 py-2">Leanne Graham</td>
-        <td class="px-4 py-2">12/06/2025</td>
-        <td class="px-4 py-2">
-          <div class="inline-block bg-[#B5FFF8] border border-[#00BBFF] text-[#00BBFF] text-sm font-semibold px-4 py-1 rounded">
-            SHIPPING
-          </div>
-        </td>
-        <td class="px-4 py-2">1,200 $</td>
-        <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
-        </td>
-      </tr>
-
-      <tr class="border-t">
-        <td class="px-4 py-2">1</td>
-        <td class="px-4 py-2">Leanne Graham</td>
-        <td class="px-4 py-2">12/06/2025</td>
-        <td class="px-4 py-2">
-          <div class="inline-block bg-[#B5FFB8] border border-[#00A613] text-[#00A613] text-sm font-semibold px-4 py-1 rounded">
-            COMPLETED
-          </div>
-        </td>
-        <td class="px-4 py-2">1,200 $</td>
-        <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
-        </td>
-      </tr>
-
-      <tr class="border-t">
-        <td class="px-4 py-2">1</td>
-        <td class="px-4 py-2">Leanne Graham</td>
-        <td class="px-4 py-2">12/06/2025</td>
-        <td class="px-4 py-2">
-          <div class="inline-block bg-[#FFD3D3] border border-[#FF0000] text-[#FF0000] text-sm font-semibold px-4 py-1 rounded">
-            CANCELED
-          </div>
-        </td>
-        <td class="px-4 py-2">1,200 $</td>
-        <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil"></i></button>
-        </td>
-      </tr>
-
-      </tbody>
-    </table>
-  </div>
-
-  <div class="mt-4 flex justify-end items-center space-x-1">
-    <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-left"></i></button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">1</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">2</button>
-    <button class="px-3 py-1 bg-orange-500 text-white rounded cursor-pointer">3</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">4</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">5</button>
-    <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-right"></i></button>
-  </div>
+  <div th:replace="invoice/show"></div>
+  <div th:replace="invoice/add"></div>
 </main>
 </body>
+<script>
+    const openShow = document.getElementById('openShow');
+    const modal = document.getElementById('invoiceModal');
+    const cancelShow = document.getElementById('cancelShow');
+
+    openShow.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    cancelShow.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+
+    const openAdd = document.getElementById('openAdd');
+    const modal2 = document.getElementById('addModal');
+    const cancelAdd = document.getElementById('cancelAdd');
+
+    openAdd.addEventListener('click', () => {
+      modal2.classList.remove('hidden');
+    });
+
+    cancelAdd.addEventListener('click', () => {
+      modal2.classList.add('hidden');
+    });
+</script>
 </html>

@@ -11,4 +11,5 @@ public interface ProductRepository {
     boolean update(Product product);
     boolean delete(int id);
     List<Product> findByBrand(String name);
+    boolean existsByName(String name);
 }

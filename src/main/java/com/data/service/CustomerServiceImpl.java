@@ -16,4 +16,39 @@ public class CustomerServiceImpl implements CustomerService{
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
+
+    @Override
+    public Customer findById(int id) {
+        return customerRepository.findById(id);
+    }
+
+    @Override
+    public boolean save(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public boolean update(Customer customer) {
+        return customerRepository.update(customer);
+    }
+
+    @Override
+    public boolean delete(int id) {
+        return customerRepository.delete(id);
+    }
+
+    @Override
+    public List<Customer> findByName(String name) {
+        return customerRepository.findByName(name);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return customerRepository.existsByPhone(phone);
+    }
 }

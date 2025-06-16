@@ -17,12 +17,16 @@
   </div>
 
   <div class="flex justify-between items-center mb-4">
+    <div th:if="${errorAdd}" th:text="${errorAdd}" style="color:red"></div>
+
     <button id="openModalBtn" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 cursor-pointer">
-      Add Product
+      Add Product <span th:text="${removeHideProductModal}"></span>
     </button>
+    <input type="hidden" id="hideModal" th:value="${hideModal}">
+
     <div class="relative">
       <form method="get" action="/products">
-        <input type="text" name="searchProduct" th:value="${searchProduct}" placeholder="Search here ..." class="border px-4 py-2 rounded pl-10">
+        <input type="text" name="searchProduct" th:value="${searchProduct}" placeholder="Search name product ..." class="border px-4 py-2 rounded pl-10">
         <span class="absolute left-3 top-1/2 -translate-y-1/2 material-icons text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
       </form>
     </div>
@@ -50,59 +54,58 @@
         <td th:text="${product.price % 1 == 0} ? ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '$' : ${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' $'" class="px-4 py-2"></td>
         <td th:text="${product.stock}" class="px-4 py-2">1</td>
         <td class="px-4 py-2 space-x-2">
-          <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can cursor-pointer"></i></button>
-          <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil cursor-pointer"></i></button>
+          <a href="javascript:void(0);"
+             class="text-red-500 hover:text-red-700"
+             th:onclick="'showDeleteModal(' + ${product.id} + ')'">
+            <i class="fa-solid fa-trash-can cursor-pointer"></i>
+          </a>
+          <a th:href="@{'/products/edit?id=' + ${product.id}}"
+             class="text-yellow-500 hover:text-yellow-600 material-icons align-middle">
+            <i class="fa-solid fa-pencil cursor-pointer"></i>
+          </a>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="mt-4 flex justify-end items-center space-x-1">
-    <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-left"></i></button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">1</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">2</button>
-    <button class="px-3 py-1 bg-orange-500 text-white rounded cursor-pointer">3</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">4</button>
-    <button class="px-3 py-1 border rounded hover:bg-gray-200 cursor-pointer">5</button>
-    <button class="px-[9.5px] py-1 border rounded hover:bg-gray-200 cursor-pointer"><i class="fa-solid fa-arrow-right"></i></button>
-  </div>
+<!--  <div class="mt-4 flex justify-end items-center space-x-1">-->
+<!--    <a th:if="${currentPage > 1}"-->
+<!--       th:href="@{/products(page=${currentPage - 1}, searchProduct=${searchProduct})}"-->
+<!--       class="px-[9.5px] py-[4.2px] border border-gray-300 rounded hover:bg-gray-200 cursor-pointer">-->
+<!--      <i class="fa-solid fa-arrow-left"></i>-->
+<!--    </a>-->
+
+<!--    <span th:each="i : ${#numbers.sequence(1, totalPages)}">-->
+<!--    <a th:href="@{/products(page=${i}, searchProduct=${searchProduct})}"-->
+<!--       th:class="'px-3 py-[5.4px] border border-gray-300 rounded hover:bg-gray-200 cursor-pointer ' + (${i} == ${currentPage} ? 'bg-orange-500 text-white' : '')"-->
+<!--       th:text="${i}">1</a>-->
+<!--    </span>-->
+
+<!--    <a th:if="${currentPage < totalPages}"-->
+<!--       th:href="@{/products(page=${currentPage + 1}, searchProduct=${searchProduct})}"-->
+<!--       class="px-[9.5px] py-[4.2px] border rounded border-gray-300 hover:bg-gray-200 cursor-pointer">-->
+<!--      <i class="fa-solid fa-arrow-right"></i>-->
+<!--    </a>-->
+<!--  </div>-->
+
 </main>
 
 <div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
-  <div class="bg-white w-[40%] rounded-lg shadow-lg p-6 relative">
-  <button id="closeModal" class="absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-black text-xl">
-      &times;
-    </button>
-    <h2 class="text-xl font-semibold mb-4">Add Product</h2>
-    <form th:action="@{/products}" method="post" th:object="${productDTO}">
-      <label class="block mb-2 text-sm font-medium">Name <span class="text-red-500">*</span></label>
-      <input th:field="*{name}" type="text" name="name" required class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500">
+  <div th:replace="product/add"></div>
+</div>
 
-      <label class="block mb-2 text-sm font-medium">Brand <span class="text-red-500">*</span></label>
-      <input th:field="*{brand}" type="text" name="brand" required class="w-full border rounded border-gray-300 px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500">
-
-      <label class="block mb-2 text-sm font-medium">Price <span class="text-red-500">*</span></label>
-      <input th:field="*{price}" type="number" step="0.01" name="price" required class="w-full border-gray-300 border rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500">
-
-      <label class="block mb-2 text-sm font-medium">Image</label>
-      <div class="w-full border border-gray-300 rounded mb-4">
-        <label class="flex items-center justify-center py-2 bg-orange-500 text-white cursor-pointer hover:bg-orange-600">
-          <i class="fa-solid fa-upload mr-2"></i> Upload
-          <input th:field="*{image}" type="file" name="imageFile" accept="image/*" class="hidden">
-        </label>
-      </div>
-
-      <label class="block mb-2 text-sm font-medium">Stock <span class="text-red-500">*</span></label>
-      <input th:field="*{stock}" type="number" name="stock" required class="w-full border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-orange-500">
-
-      <div class="flex justify-end gap-2">
-        <button type="button" id="cancelBtn" class="px-4 py-2 border cursor-pointer rounded border-gray-300 hover:bg-gray-100">Cancel</button>
-        <button type="submit" class="px-4 py-2 bg-orange-500 text-white cursor-pointer rounded hover:bg-orange-600">Save</button>
-      </div>
-    </form>
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+  <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Xác nhận</h2>
+    <p class="text-gray-600 mb-6">Bạn có chắc chắn muốn xóa sản phẩm này khỏi hệ thống không?</p>
+    <div class="flex justify-end space-x-3">
+      <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 cursor-pointer">Hủy</button>
+      <a id="confirmDeleteBtn" href="#" class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Xóa</a>
+    </div>
   </div>
 </div>
+
 </body>
 <script>
   const openBtn = document.getElementById('openModalBtn');
@@ -121,5 +124,24 @@
   cancelBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
   });
+
+  let hideModal = document.getElementById('hideModal').value;
+
+  if (hideModal != null && hideModal === 'yes') {
+    const modal2 = document.getElementById('productModal');
+    modal2.classList.remove('hidden');
+  }
+
+  function showDeleteModal(productId) {
+    const deleteModal = document.getElementById('deleteModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    confirmDeleteBtn.href = `/products/delete?id=${productId}`;
+    deleteModal.classList.remove('hidden');
+  }
+
+  function closeDeleteModal() {
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.classList.add('hidden');
+  }
 </script>
 </html>

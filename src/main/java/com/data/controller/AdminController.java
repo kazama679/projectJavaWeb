@@ -31,10 +31,12 @@ public class AdminController {
                 .findFirst();
         if (username == null || username.trim().isEmpty() ) {
             model.addAttribute("errorUsername", "Please enter both username...");
+            model.addAttribute("password", password);
             return "admin/login";
         }
         if (password == null || password.trim().isEmpty()) {
-            model.addAttribute("errorPasword", "Please enter both password...");
+            model.addAttribute("errorPassword", "Please enter both password...");
+            model.addAttribute("username", username);
             return "admin/login";
         }
         if(admin.isPresent()){
@@ -47,9 +49,9 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session) {
-//        if (session.getAttribute("admin") == null) {
-//            return "redirect:/login";
-//        }
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/login";
+        }
         return "admin/dashboard";
     }
 }
