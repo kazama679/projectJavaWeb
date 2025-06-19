@@ -1,7 +1,12 @@
 package com.data.controller;
 
 import com.data.entity.Admin;
+import com.data.entity.Invoice;
 import com.data.repository.AdminRepository;
+import com.data.service.CustomerService;
+import com.data.service.InvoiceDetailService;
+import com.data.service.InvoiceService;
+import com.data.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +15,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class AdminController {
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private InvoiceService invoiceService;
 
     @GetMapping("/login")
     public String login(Model model, HttpSession session) {
@@ -48,10 +64,18 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
-        if (session.getAttribute("admin") == null) {
-            return "redirect:/login";
-        }
+    public String dashboard(HttpSession session, Model model) {
+//        if (session.getAttribute("admin") == null) {
+//            return "redirect:/login";
+//        }
+        model.addAttribute("customers", customerService.findAll().size());
+        model.addAttribute("products", productService.findAll().size());
+        model.addAttribute("invoiceNumber", invoiceService.findAll().size());
+        List<Invoice> invoices = invoiceService.findAll();
+        Collections.reverse(invoices);
+        List<Invoice> firstFour = invoices.subList(0, Math.min(4, invoices.size()));
+        model.addAttribute("invoices", firstFour);
+        model.addAttribute("revenue", invoiceService.findAll().stream().mapToDouble(i->i.getTotal_amount()).sum());
         return "admin/dashboard";
     }
 }

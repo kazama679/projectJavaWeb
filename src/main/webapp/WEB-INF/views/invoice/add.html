@@ -8,23 +8,25 @@
 </head>
 <body>
 <div class="flex min-h-screen">
-    <main class="flex-1">
+    <div th:replace="layout/sidebar"></div>
+    <main class="flex-1 p-6 mt-6">
         <div class="text-2xl font-bold mb-6">FORM INVOICE</div>
 
         <div class="mb-6">
             <label class="block text-sm font-medium mb-2 text-gray-700">Customer <span class="text-red-500">*</span></label>
-            <select class="w-full border rounded p-2 mr-8">
-                <option>Michael Ballack</option>
-                <option>Michael Ballack</option>
-                <option>Michael Ballack</option>
-            </select>
+            <form method="post" action="/invoices/selectCustomer">
+                <select name="customerId" class="w-full border rounded p-2 mr-8" onchange="this.form.submit()">
+                    <option th:each="c : ${customers}"
+                            th:value="${c.id}"
+                            th:selected="${c.id == selectedCustomer?.id}"
+                            th:text="${c.name}">Michael Ballack</option>
+                </select>
+            </form>
         </div>
 
         <div class="bg-white rounded-md overflow-hidden">
-            <!-- Tiêu đề -->
             <div class="bg-gray-200 px-6 py-2 font-bold text-center text-xl">INVOICE DETAIL</div>
 
-            <!-- Bảng dữ liệu -->
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 text-gray-700">
                 <tr class="border-b border-gray-200">
@@ -38,132 +40,54 @@
                 </tr>
                 </thead>
                 <tbody class="text-gray-800">
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="p-4">1</td>
-                    <td class="p-4">Shoe</td>
-                    <td class="p-4">Balenciaga</td>
+                <tr th:each="item, iStat : ${session.invoiceItems}" class="bg-white border-b border-gray-200">
+                    <td th:text="${iStat.count}" class="p-4">1</td>
+                    <td th:text="${item.product.name}" class="p-4">Shoe</td>
+                    <td th:text="${item.product.brand}" class="p-4">Balenciaga</td>
                     <td class="p-4 text-center">
-                        <div class="flex justify-center items-center space-x-2 text-[#1e2a66]">
-                            <button class="cursor-pointer w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">
-                                -
-                            </button>
-                            <input type="text" value="2" min="1"
-                                   class="w-8 h-8 border border-[#dcdcec] rounded-md text-center text-[#1e2a66] focus:outline-none focus:ring-1 focus:ring-[#a0a4cc] no-spinner" />
-                            <button class="cursor-pointer w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">
-                                +
-                            </button>
-                        </div>
+                        <form th:action="@{'/invoices/updateQuantity/' + ${iStat.index}}" method="post">
+                            <div class="flex justify-center items-center space-x-2 text-[#1e2a66]">
+                                <a th:href="@{'/invoices/decrease/' + ${iStat.index}}" class="cursor-pointer w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">-</a>
+                                <input name="quantity" type="number" min="1"
+                                       th:value="${item.quantity}"
+                                       class="w-12 h-8 border border-[#dcdcec] rounded-md text-center text-[#1e2a66] focus:outline-none focus:ring-1 focus:ring-[#a0a4cc]"/>
+                                <a th:href="@{'/invoices/increase/' + ${iStat.index}}" class="cursor-pointer w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">+</a>
+                                <button type="submit" class="hidden"></button>
+                            </div>
+                        </form>
+                        <div th:if="${item.product.getStock() < item.quantity}" class="text-red-500 mt-1 text-sm">Số lượng kho không đủ!</div>
                     </td>
-                    <td class="p-4 text-right">1,200 $</td>
-                    <td class="p-4 text-right">2,400 $</td>
+                    <td th:text="${item.product.price}" class="p-4 text-right">1,200 $</td>
+                    <td th:text="${item.product.price * item.quantity}" class="p-4 text-right">2,400 $</td>
                     <td class="p-4 text-center">
-                        <button class="text-red-600 hover:text-red-800 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="p-4">1</td>
-                    <td class="p-4">Shoe</td>
-                    <td class="p-4">Balenciaga</td>
-                    <td class="p-4 text-center">
-                        <div class="flex justify-center items-center space-x-2 text-[#1e2a66]">
-                            <button class="w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">
-                                -
-                            </button>
-                            <input type="text" value="2" min="1"
-                                   class="w-8 h-8 border border-[#dcdcec] rounded-md text-center text-[#1e2a66] focus:outline-none focus:ring-1 focus:ring-[#a0a4cc] no-spinner" />
-                            <button class="w-8 h-8 border border-[#dcdcec] rounded-md flex items-center justify-center hover:bg-[#f0f0f5]">
-                                +
-                            </button>
-                        </div>
-                    </td>
-                    <td class="p-4 text-right">1,200 $</td>
-                    <td class="p-4 text-right">2,400 $</td>
-                    <td class="p-4 text-center">
-                        <button class="text-red-600 hover:text-red-800 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="text-red-600 hover:text-red-800 cursor-pointer">
+                            <a th:href="@{'/invoices/deleteItem/' + ${iStat.index}}" class="text-red-600 hover:text-red-800 cursor-pointer">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <!-- Footer icon -->
-            <div class="flex justify-center p-2 bg-gray-200 cursor-pointer hover:bg-gray-300">
+            <a href="/invoices/add/addDetail" class="flex justify-center p-2 bg-gray-200 cursor-pointer hover:bg-gray-300">
                 <span class="text-xl"><i class="fa-solid fa-cart-plus"></i></span>
-            </div>
+            </a>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex justify-end space-x-3 mt-6">
-            <button class="px-5 py-2 border-gray-200 bg-white border rounded hover:bg-gray-50 cursor-pointer">Cancel</button>
-            <button class="px-5 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 cursor-pointer">Save</button>
-        </div>
+        <form method="post" action="/invoices/save">
+            <div class="flex justify-end space-x-3 mt-6">
+                <a href="/invoices" class="px-5 py-2 border-gray-200 bg-white border rounded hover:bg-gray-50 cursor-pointer">Cancel</a>
+                <th:block th:with="hasInvalidQuantity=${session.invoiceItems.?[quantity > product.stock].size() > 0}">
+                    <button type="submit"
+                            class="px-5 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 cursor-pointer disabled:opacity-50"
+                            th:disabled="${hasInvalidQuantity}">
+                        Save
+                    </button>
+                </th:block>
+            </div>
+        </form>
     </main>
 </div>
-
-
-
-
-<!--// form thêm-->
-<!--<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">-->
-<!--    <div class="bg-white rounded-lg shadow-lg w-[900px] max-w-full p-4">-->
-<!--        <div class="flex justify-between items-center p-4">-->
-<!--            <h2 class="text-lg font-semibold">Add Invoice detail</h2>-->
-<!--            <button class="text-gray-500 hover:text-red-500 text-xl cursor-pointer">×</button>-->
-<!--        </div>-->
-
-<!--        <div class="overflow-x-auto p-4">-->
-<!--            <table class="w-full text-sm text-left">-->
-<!--                <thead class="bg-gray-100 text-gray-700">-->
-<!--                <tr>-->
-<!--                    <th class="p-3 text-center">-->
-<!--                        <input type="checkbox" class="cursor-pointer" />-->
-<!--                    </th>-->
-<!--                    <th class="p-3">STT</th>-->
-<!--                    <th class="p-3">Product Name</th>-->
-<!--                    <th class="p-3">Brand</th>-->
-<!--                    <th class="p-3 text-center">Quantity</th>-->
-<!--                    <th class="p-3">Price</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr class="border-b border-gray-200">-->
-<!--                    <td class="p-3 text-center">-->
-<!--                        <input type="checkbox" class="cursor-pointer" checked />-->
-<!--                    </td>-->
-<!--                    <td class="p-3">1</td>-->
-<!--                    <td class="p-3">Shoe</td>-->
-<!--                    <td class="p-3">Balenciaga</td>-->
-<!--                    <td class="p-3 text-center">-->
-<!--                        <input type="number" value="2" class="w-16 border rounded px-2 py-1 text-center" />-->
-<!--                    </td>-->
-<!--                    <td class="p-3">1,222200 $</td>-->
-<!--                </tr>-->
-<!--                <tr class="border-b border-gray-200">-->
-<!--                    <td class="p-3 text-center">-->
-<!--                        <input type="checkbox" class="cursor-pointer" checked />-->
-<!--                    </td>-->
-<!--                    <td class="p-3">1</td>-->
-<!--                    <td class="p-3">Shoe</td>-->
-<!--                    <td class="p-3">Balenciaga</td>-->
-<!--                    <td class="p-3 text-center">-->
-<!--                        <input type="number" value="2" class="w-16 border rounded px-2 py-1 text-center" />-->
-<!--                    </td>-->
-<!--                    <td class="p-3">1,200 $</td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--        </div>-->
-
-<!--        <div class="flex justify-end gap-3 p-4 pt-6 pr-0 mt-4 border-t border-gray-400 w-[96%] mx-auto">-->
-<!--            <button class="px-4 py-2 border border-gray-200 rounded hover:bg-gray-100 cursor-pointer">Cancel</button>-->
-<!--            <button class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 cursor-pointer">Save</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-
-
-
-
-
 </body>
 </html>

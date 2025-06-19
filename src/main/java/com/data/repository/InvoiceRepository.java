@@ -1,0 +1,16 @@
+package com.data.repository;
+
+import com.data.entity.Customer;
+import com.data.entity.Invoice;
+
+import java.util.Date;
+import java.util.List;
+
+public interface InvoiceRepository {
+    Invoice findById(int id);
+    List<Invoice> findAll();
+    boolean save(Invoice invoice);
+    boolean update(Invoice invoice);
+    List<Invoice> searchByCustomerName(String name);
+    List<Invoice> searchByCreatedDate(Date date);
+}

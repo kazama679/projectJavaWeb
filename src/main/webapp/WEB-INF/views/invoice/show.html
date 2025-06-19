@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden" id="invoiceModal">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40" id="invoiceModal">
     <div class="bg-white rounded-lg shadow-lg w-[900px] max-w-full p-4">
         <div class="flex justify-between items-center p-4">
             <h2 class="text-lg font-semibold">Invoice Detail</h2>
-            <button id="cancelShow" class="text-gray-500 hover:text-red-500 text-xl cursor-pointer">×</button>
+            <a href="/invoices" id="cancelShow" class="text-gray-500 hover:text-red-500 text-xl cursor-pointer">×</a>
         </div>
 
         <div class="overflow-x-auto p-4">
@@ -24,19 +26,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="border-b border-gray-200">
-                    <td class="p-3">1</td>
-                    <td class="p-3">Shoe</td>
-                    <td class="p-3">Balenciaga</td>
-                    <td class="p-3 text-center">2</td>
-                    <td class="p-3">1,200 $</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="p-3">1</td>
-                    <td class="p-3">Shoe</td>
-                    <td class="p-3">Balenciaga</td>
-                    <td class="p-3 text-center">2</td>
-                    <td class="p-3">1,200 $</td>
+                <tr th:each="invoiceDetail, i : ${invoiceDetails}" class="border-b border-gray-200">
+                    <td th:text="${i.index + 1}" class="p-3">1</td>
+                    <td th:text="${invoiceDetail.product.name}" class="p-3">Shoe</td>
+                    <td th:text="${invoiceDetail.product.brand}" class="p-3">Balenciaga</td>
+                    <td th:text="${invoiceDetail.quantity}" class="p-3 text-center">2</td>
+                    <td th:text="${invoiceDetail.product.price}" class="p-3">1,200 $</td>
                 </tr>
                 </tbody>
             </table>

@@ -51,4 +51,14 @@ public class CustomerServiceImpl implements CustomerService{
     public boolean existsByPhone(String phone) {
         return customerRepository.existsByPhone(phone);
     }
+
+    @Override
+    public boolean existsByEmailEdit(String email, int id) {
+        return customerRepository.existsByEmailEdit(email, id);
+    }
+
+    @Override
+    public boolean existsByPhoneEdit(String phone, int id) {
+        return customerRepository.existsByPhoneEdit(phone, id);
+    }
 }

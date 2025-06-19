@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CustomerRepositoryImpl  implements CustomerRepository{
+public class CustomerRepositoryImpl implements CustomerRepository{
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -106,6 +106,38 @@ public class CustomerRepositoryImpl  implements CustomerRepository{
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select count(c) from Customer c where c.phone = :phone", Long.class)
                     .setParameter("phone", phone).uniqueResult() > 0;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean existsByPhoneEdit(String phone, int id) {
+        try (Session session = sessionFactory.openSession()) {
+            String normalized = phone.trim().toLowerCase().replaceAll("\\s+", " ");
+            return session.createQuery(
+                            "select count(c) from Customer c where lower(trim(c.phone)) = :phone and c.id != :id",
+                            Long.class)
+                    .setParameter("phone", normalized)
+                    .setParameter("id", id)
+                    .uniqueResult() > 0;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean existsByEmailEdit(String email, int id) {
+        try (Session session = sessionFactory.openSession()) {
+            String normalized = email.trim().toLowerCase().replaceAll("\\s+", " ");
+            return session.createQuery(
+                            "select count(c) from Customer c where lower(trim(c.email)) = :email and c.id != :id",
+                            Long.class)
+                    .setParameter("email", normalized)
+                    .setParameter("id", id)
+                    .uniqueResult() > 0;
         } catch (HibernateException e) {
             e.printStackTrace();
             return false;

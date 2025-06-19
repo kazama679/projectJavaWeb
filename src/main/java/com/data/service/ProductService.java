@@ -12,4 +12,7 @@ public interface ProductService {
     boolean delete(int id);
     List<Product> findByBrand(String name);
     boolean existsByName(String name);
+    boolean existsByNameEdit(String name, int id);
+    List<Product> findByStock(int stock);
+    List<Product> findByPriceRange(double min, double max);
 }

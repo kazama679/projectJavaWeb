@@ -5,6 +5,45 @@
     <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 99px;
+            font-weight: bold;
+            font-size: 12px;
+            width: fit-content;
+        }
+
+        .CONFIRMED {
+            background: #D9CCFF;
+            color: #7D4CFF;
+            border: 1px solid #7D4CFF;
+        }
+
+        .PENDING {
+            background: #FFDD99;
+            color: #FF9900;
+            border: 1px solid #FF9900;
+        }
+
+        .SHIPPING {
+            background: #99EEFF;
+            color: #0099FF;
+            border: 1px solid #0099FF;
+        }
+
+        .COMPLETED {
+            background: #B3FFB3;
+            color: #00CC00;
+            border: 1px solid #00CC00;
+        }
+
+        .CANCELED {
+            background: #FFCCCC;
+            color: #FF3333;
+            border: 1px solid #FF3333;
+        }
+    </style>
 </head>
 <body class="flex min-h-screen text-gray-700">
 <div th:replace="layout/sidebar"></div>
@@ -13,23 +52,23 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="bg-white p-4 rounded shadow">
             <p class="text-gray-500 text-sm">TOTAL REVENUE</p>
-            <h2 class="text-xl font-bold">$12,426</h2>
-            <p class="text-green-500 text-sm font-medium">+36%</p>
+            <h2 th:text="${#numbers.formatDecimal(revenue, 0, 'NONE', 0, 'NONE')} + ' $'" class="text-xl font-bold">$12,426</h2>
+<!--            <p class="text-green-500 text-sm font-medium">+36%</p>-->
         </div>
         <div class="bg-white p-4 rounded shadow">
             <p class="text-gray-500 text-sm">TOTAL PRODUCT</p>
-            <h2 class="text-xl font-bold">1,500</h2>
-            <p class="text-red-500 text-sm font-medium">-14%</p>
+            <h2 th:text="${products}" class="text-xl font-bold">1,500</h2>
+<!--            <p class="text-red-500 text-sm font-medium">-14%</p>-->
         </div>
         <div class="bg-white p-4 rounded shadow">
             <p class="text-gray-500 text-sm">TOTAL INVOICE</p>
-            <h2 class="text-xl font-bold">84,382</h2>
-            <p class="text-green-500 text-sm font-medium">+36%</p>
+            <h2 th:text="${invoiceNumber}" class="text-xl font-bold">84,382</h2>
+<!--            <p class="text-green-500 text-sm font-medium">+36%</p>-->
         </div>
         <div class="bg-white p-4 rounded shadow">
             <p class="text-gray-500 text-sm">TOTAL USER</p>
-            <h2 class="text-xl font-bold">33,493</h2>
-            <p class="text-green-500 text-sm font-medium">+36%</p>
+            <h2 th:text="${customers}" class="text-xl font-bold">33,493</h2>
+<!--            <p class="text-green-500 text-sm font-medium">+36%</p>-->
         </div>
     </div>
 
@@ -80,54 +119,27 @@
         <div class="col-span-2 bg-white p-4 rounded shadow">
             <div class="flex justify-between mb-2">
                 <h3 class="font-semibold">Transactions</h3>
-                <a href="#" class="text-sm text-blue-500">See All Transactions</a>
+                <a href="/invoices" class="text-sm text-blue-500">See All Transactions</a>
             </div>
             <div class="divide-y">
-                <div class="flex justify-between py-2">
-                    <span class="text-green-500">● Completed</span>
+                <div class="flex justify-between py-2" th:each="invoice : ${invoices}">
+                    <span th:text="${'● '+invoice.status}" th:class="${invoice.status + ' status-badge'}">● Completed</span>
                     <span>Visa ****4831</span>
-                    <span>$182.94</span>
-                </div>
-                <div class="flex justify-between py-2">
-                    <span class="text-green-500">● Completed</span>
-                    <span>Mastercard ****6442</span>
-                    <span>$99.00</span>
-                </div>
-                <div class="flex justify-between py-2">
-                    <span class="text-yellow-500">● Pending</span>
-                    <span>Account ****882</span>
-                    <span>$249.94</span>
-                </div>
-                <div class="flex justify-between py-2">
-                    <span class="text-red-500">● Canceled</span>
-                    <span>Amex ****5666</span>
-                    <span>$199.24</span>
+                    <span th:text="${#numbers.formatDecimal(invoice.total_amount, 0, 'NONE', 0, 'NONE')} + ' $'">$182.94</span>
                 </div>
             </div>
         </div>
 
         <div class="bg-white p-4 rounded shadow">
             <h3 class="font-semibold mb-2">Recent Customers</h3>
-            <ul class="space-y-3 text-sm">
+            <ul class="space-y-3 text-sm mt-4" th:each="i : ${invoices}">
                 <li class="flex justify-between">
-                    <span>Jenny Wilson</span>
-                    <span>$11,234</span>
-                </li>
-                <li class="flex justify-between">
-                    <span>Devon Lane</span>
-                    <span>$11,159</span>
-                </li>
-                <li class="flex justify-between">
-                    <span>Jane Cooper</span>
-                    <span>$10,483</span>
-                </li>
-                <li class="flex justify-between">
-                    <span>Dianne Russell</span>
-                    <span>$9,084</span>
+                    <span th:text="${i.customer.getName()}">Jenny Wilson</span>
+                    <span th:text="${#numbers.formatDecimal(i.total_amount, 0, 'NONE', 0, 'NONE')} + ' $'">$11,234</span>
                 </li>
             </ul>
             <div class="mt-4 text-center">
-                <a href="#" class="text-blue-500 text-sm">SEE ALL CUSTOMERS</a>
+                <a href="/customers" class="text-blue-500 text-sm">SEE ALL CUSTOMERS</a>
             </div>
         </div>
     </div>

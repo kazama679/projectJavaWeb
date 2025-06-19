@@ -3,6 +3,7 @@ package com.data.controller;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.data.dto.ProductDTO;
+import com.data.entity.Customer;
 import com.data.entity.Product;
 import com.data.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,10 @@ public class ProductController {
 
     @GetMapping("/products")
     public String list(
-            @RequestParam(value = "searchProduct", required = false) String search,
-            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "brand", required = false) String brand,
+            @RequestParam(value = "stock", required = false) Integer stock,
+            @RequestParam(value = "min", required = false) Double min,
+            @RequestParam(value = "max", required = false) Double max,
             HttpSession session,
             Model model
     ) {
@@ -39,15 +42,22 @@ public class ProductController {
 //            return "redirect:/login";
 //        }
         List<Product> allProducts;
-        if (search != null && !search.trim().isEmpty()) {
-            allProducts = productService.findByBrand(search);
+        if (brand != null && !brand.trim().isEmpty()) {
+            allProducts = productService.findByBrand(brand);
+        } else if (stock != null) {
+            allProducts = productService.findByStock(stock);
+        } else if (min != null && max != null) {
+            allProducts = productService.findByPriceRange(min, max);
         } else {
             allProducts = productService.findAll();
         }
+
         model.addAttribute("products", allProducts);
-        model.addAttribute("searchProduct", search);
         model.addAttribute("productDTO", new ProductDTO());
-        model.addAttribute("currentPage", page);
+        model.addAttribute("brand", brand);
+        model.addAttribute("stock", stock);
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
         return "product/list";
     }
 
@@ -90,9 +100,82 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("products/delete")
-    public String deleteCourse(@RequestParam("id") int id) {
-        productService.delete(id);
+//    @GetMapping("products/delete")
+//    public String deleteCourse(@RequestParam("id") int id) {
+//        productService.delete(id);
+//        return "redirect:/products";
+//    }
+
+    @GetMapping("/products/updateStatus")
+    public String updateStatus(int id) {
+        Product product = productService.findById(id);
+        if (product != null) {
+            product.setStatus(!product.isStatus());
+            productService.save(product);
+        }
+        return "redirect:/products";
+    }
+
+    @GetMapping("/products/edit")
+    public String showEditForm(@RequestParam("id") int id, Model model) {
+        Product product = productService.findById(id);
+        if (product == null) {
+            return "redirect:/products";
+        }
+
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setBrand(product.getBrand());
+        dto.setPrice(product.getPrice());
+        dto.setStock(product.getStock());
+        dto.setStatus(product.isStatus());
+
+        model.addAttribute("productDTO", dto);
+        List<Product> products = productService.findAll();
+        model.addAttribute("products", products);
+        model.addAttribute("oldImage", product.getImage()); // truyền ảnh cũ qua view (không trong DTO)
+
+        return "product/edit"; // file html
+    }
+
+    @PostMapping("/products/update")
+    public String updateProduct(@Valid @ModelAttribute("productDTO") ProductDTO dto,
+                                BindingResult result,
+                                @RequestParam("oldImage") String oldImage,
+                                Model model) {
+        if (productService.existsByNameEdit(dto.getName(), dto.getId())) {
+            result.rejectValue("name", "error.product", "Tên sản phẩm đã tồn tại!");
+        }
+        if (result.hasErrors()) {
+            model.addAttribute("oldImage", oldImage);
+            return "product/edit";
+        }
+        Product product = new Product();
+        product.setId(dto.getId());
+        product.setName(dto.getName());
+        product.setBrand(dto.getBrand());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setStatus(dto.isStatus());
+
+        if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+            try {
+                Map upload = cloudinary.uploader().upload(dto.getImage().getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) upload.get("url");
+                product.setImage(imageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException("Lỗi upload ảnh: " + e.getMessage());
+            }
+        } else {
+            product.setImage(oldImage);
+        }
+        boolean updated = productService.update(product);
+        if (!updated) {
+            model.addAttribute("errorUpdate", "Cập nhật thất bại!");
+            model.addAttribute("oldImage", oldImage);
+            return "product/edit";
+        }
         return "redirect:/products";
     }
 }

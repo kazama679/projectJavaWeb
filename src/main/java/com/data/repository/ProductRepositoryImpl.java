@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -78,17 +79,18 @@ public class ProductRepositoryImpl implements ProductRepository{
         }
     }
 
-    @Override
-    public List<Product> findByBrand(String name) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Product where brand like :name", Product.class)
-                    .setParameter("name", "%" + name + "%")
-                    .getResultList();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @Override
+//    public List<Product> findByBrand(String name) {
+//        try (Session session = sessionFactory.openSession()) {
+//            return session.createQuery("from Product where brand like :name", Product.class)
+//                    .setParameter("name", "%" + name + "%")
+//                    .getResultList();
+//        } catch (HibernateException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
 
     @Override
     public boolean existsByName(String name) {
@@ -101,4 +103,58 @@ public class ProductRepositoryImpl implements ProductRepository{
             return false;
         }
     }
+
+    @Override
+    public boolean existsByNameEdit(String name, int id) {
+        try (Session session = sessionFactory.openSession()) {
+            String normalized = name.trim().toLowerCase().replaceAll("\\s+", " ");
+            return session.createQuery(
+                            "select count(c) from Product c where lower(trim(c.name)) = :name and c.id != :id",
+                            Long.class)
+                    .setParameter("name", normalized)
+                    .setParameter("id", id)
+                    .uniqueResult() > 0;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Product> findByBrand(String brand) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Product where lower(brand) like :brand", Product.class)
+                    .setParameter("brand", "%" + brand.toLowerCase().trim() + "%")
+                    .getResultList();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Product> findByStock(int stock) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Product where stock = :stock", Product.class)
+                    .setParameter("stock", stock)
+                    .getResultList();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Product> findByPriceRange(double min, double max) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Product where price between :min and :max", Product.class)
+                    .setParameter("min", min)
+                    .setParameter("max", max)
+                    .getResultList();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
 }

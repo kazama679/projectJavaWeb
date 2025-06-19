@@ -17,7 +17,7 @@
     </div>
 
     <div class="flex justify-between items-center mb-4">
-        <button class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 cursor-pointer">Add User</button>
+        <a href="customers/add" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 cursor-pointer">Add User</a>
         <div class="relative">
             <input type="text" placeholder="Search here ..." class="border px-4 py-2 rounded pl-10">
             <span class="absolute left-3 top-1/2 -translate-y-1/2 material-icons text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -33,19 +33,33 @@
                 <th class="px-4 py-2">Email</th>
                 <th class="px-4 py-2">Phone</th>
                 <th class="px-4 py-2">Address</th>
+                <th class="px-4 py-2">Status</th>
                 <th class="px-4 py-2">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr class="border-t" th:each="customer : ${customers}">
-                <td th:text="customer.id" class="px-4 py-2">1</td>
-                <td th:text="customer.name" class="px-4 py-2">Leanne Graham</td>
-                <td th:text="customer.email" class="px-4 py-2">Sincere@gmail.com</td>
-                <td th:text="customer.phone" class="px-4 py-2">0987654321</td>
-                <td th:text="customer.address" class="px-4 py-2">Alabama</td>
+                <td th:text="${customer.id}" class="px-4 py-4">1</td>
+                <td th:text="${customer.name}" class="px-4 py-4">Leanne Graham</td>
+                <td th:text="${customer.email}" class="px-4 py-4">Sincere@gmail.com</td>
+                <td th:text="${customer.phone}" class="px-4 py-4">0987654321</td>
+                <td th:text="${customer.address}" class="px-4 py-4">Alabama</td>
+                <td>
+                    <div th:if="${customer.status}" class="inline-block bg-[#D1FADF] text-[#027A48] text-sm font-semibold px-3 py-1 rounded-full">
+                        ● Active
+                    </div>
+                    <div th:unless="${customer.status}" class="inline-block bg-[#FEE4E2] text-[#B42318] text-sm font-semibold px-3 py-1 rounded-full">
+                        ● Deactivate
+                    </div>
+                </td>
                 <td class="px-4 py-2 space-x-2">
-                    <button class="text-red-500 hover:text-red-700 material-icons align-middle"><i class="fa-solid fa-trash-can cursor-pointer"></i></button>
-                    <button class="text-yellow-500 hover:text-yellow-600 material-icons align-middle"><i class="fa-solid fa-pencil cursor-pointer"></i></button>
+                    <a th:href="@{/customers/updateStatus(id=${customer.id})}" class="hover:text-red-700">
+                        <i th:if="${customer.status}" class="text-green-700 fa-solid fa-lock"></i>
+                        <i th:if="${!customer.status}" class="text-red-700 fa-solid fa-lock-open"></i>
+                    </a>
+                    <a th:href="@{'/customers/edit?id=' + ${customer.id}}" class="text-yellow-500 hover:text-yellow-600">
+                        <i class="fa-solid fa-pencil cursor-pointer"></i>
+                    </a>
                 </td>
             </tr>
             </tbody>

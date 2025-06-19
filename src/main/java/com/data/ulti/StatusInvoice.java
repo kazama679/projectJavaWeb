@@ -1,5 +1,5 @@
 package com.data.ulti;
 
 public enum StatusInvoice {
-    PENDING, CONFIRMED, SHIPING, COMPLETED, CANCELED
+    PENDING, CONFIRMED, SHIPPING, COMPLETED, CANCELED
 }

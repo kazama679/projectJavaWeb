@@ -14,8 +14,8 @@
 
         <mapping class="com.data.entity.Admin" />
         <mapping class="com.data.entity.Product" />
-<!--        <mapping class="com.data.entity.Customer" />-->
-<!--        <mapping class="com.data.entity.Invoice" />-->
-<!--        <mapping class="com.data.entity.InvoiceDetail" />-->
+        <mapping class="com.data.entity.Customer" />
+        <mapping class="com.data.entity.Invoice" />
+        <mapping class="com.data.entity.InvoiceDetail" />
     </session-factory>
 </hibernate-configuration>

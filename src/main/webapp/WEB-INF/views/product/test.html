@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="bg-white w-[40%] rounded-lg shadow-lg p-6 relative">
+    <button id="closeModalEdit" class="absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-black text-xl">
+        &times;
+    </button>
+    <h2 class="text-xl font-semibold mb-4">Edit Product</h2>
+    <form th:action="@{/products}" method="post" th:object="${productDTO}" enctype="multipart/form-data">
+        <label class="block mb-2 text-sm font-medium">Name <span class="text-red-500">*</span></label>
+        <input th:field="*{name}" type="text" name="name" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Brand <span class="text-red-500">*</span></label>
+        <input th:field="*{brand}" type="text" name="brand" class="w-full border rounded border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Price <span class="text-red-500">*</span></label>
+        <input th:field="*{price}" type="number" step="0.01" name="price" class="w-full border rounded border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium pt-4">Image</label>
+        <div class="w-full border border-gray-300 rounded mb-4">
+            <label class="flex items-center justify-center py-2 bg-orange-500 text-white cursor-pointer hover:bg-orange-600">
+                <i class="fa-solid fa-upload mr-2"></i> Upload
+                <input th:field="*{image}" type="file" accept="image/*" class="hidden" onchange="previewImage(event)">
+            </label>
+        </div>
+
+        <div id="previewContainer" class="hidden flex items-center justify-between bg-gray-100 mt-[-4px] p-2 mb-2 rounded">
+            <div class="flex items-center gap-2">
+                <img id="preview" src="" class="w-14 h-14 object-cover rounded" />
+                <span id="fileName" class="text-sm text-gray-700"></span>
+            </div>
+            <button type="button" class="text-red-500 hover:text-red-700" onclick="removeImage()">
+                <i class="fa-solid fa-trash-can cursor-pointer mr-2"></i>
+            </button>
+        </div>
+
+        <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Stock <span class="text-red-500">*</span></label>
+        <input th:field="*{stock}" type="number" name="stock" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="text-red-500 text-sm"></span>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <button id="cancelBtnEdit" type="button" id="cancelBtn" class="px-4 py-2 border cursor-pointer rounded border-gray-300 hover:bg-gray-100">Cancel</button>
+            <button type="submit" class="px-4 py-2 bg-orange-500 text-white cursor-pointer rounded hover:bg-orange-600">Save</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

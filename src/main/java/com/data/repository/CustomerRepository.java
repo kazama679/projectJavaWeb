@@ -12,4 +12,6 @@ public interface CustomerRepository {
     List<Customer> findByName(String name);
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
+    boolean existsByEmailEdit(String email, int id);
+    boolean existsByPhoneEdit(String phone, int id);
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="customer/list"></div>
+<div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+<div class="bg-white w-[40%] rounded-lg shadow-lg p-6 relative">
+    <button id="closeModal" class="absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-black text-xl">
+        &times;
+    </button>
+    <h2 class="text-xl font-semibold mb-4">Add Customer</h2>
+    <form th:action="@{/customers/add}" method="post" th:object="${customerDTO}">
+        <label class="block mb-2 text-sm font-medium">Name <span class="text-red-500">*</span></label>
+        <input th:field="*{name}" type="text" name="name" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Email <span class="text-red-500">*</span></label>
+        <input th:field="*{email}" type="text" name="email" class="w-full border rounded border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Phone <span class="text-red-500">*</span></label>
+        <input th:field="*{phone}" type="number" name="phone" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Address <span class="text-red-500">*</span></label>
+        <input th:field="*{address}" type="text" step="0.01" name="address" class="w-full border rounded border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-500 text-sm"></span>
+
+        <label class="block mb-2 text-sm font-medium mt-4">Status <span class="text-red-500">*</span></label>
+        <select name="status" class="w-full border rounded border-gray-300 px-4 py-2">
+            <option value=true selected="selected">Hoạt động</option>
+            <option value=false>Khóa</option>
+        </select>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <button type="button" id="cancelBtn" class="px-4 py-2 border cursor-pointer rounded border-gray-300 hover:bg-gray-100">Cancel</button>
+            <button type="submit" class="px-4 py-2 bg-orange-500 text-white cursor-pointer rounded hover:bg-orange-600">Save</button>
+        </div>
+    </form>
+</div>
+</div>
+</body>
+<script>
+    document.getElementById('cancelBtn')?.addEventListener('click', () => {
+        window.location.href = "/customers";
+    });
+
+    document.getElementById('closeModal')?.addEventListener('click', () => {
+        window.location.href = "/customers";
+    });
+</script>
+</html>

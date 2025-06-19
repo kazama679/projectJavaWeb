@@ -46,4 +46,19 @@ public class ProductServiceImpl implements ProductService {
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }
+
+    @Override
+    public boolean existsByNameEdit(String name, int id) {
+        return productRepository.existsByNameEdit(name, id);
+    }
+
+    @Override
+    public List<Product> findByStock(int stock) {
+        return productRepository.findByStock(stock);
+    }
+
+    @Override
+    public List<Product> findByPriceRange(double min, double max) {
+        return productRepository.findByPriceRange(min, max);
+    }
 }
