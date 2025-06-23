@@ -50,8 +50,8 @@
     </div>
 
     <!-- Hiển thị ảnh cũ nếu có -->
-    <div th:if="${oldImage != null}" class="mt-2 mb-2">
-      <img th:src="${oldImage}" alt="Ảnh cũ" class="w-24 h-24 object-cover rounded border" />
+    <div th:if="${oldImage != null}" class="mt-1 mb-2">
+      <img th:src="${oldImage}" alt="Ảnh cũ" class="w-16 h-16 object-cover rounded" />
     </div>
 
     <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-red-500 text-sm"></span>
@@ -60,8 +60,8 @@
     <input th:field="*{stock}" type="number" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
     <span th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="text-red-500 text-sm"></span>
 
-    <label class="block mb-2 text-sm font-medium mt-4">Status</label>
-    <input th:field="*{status}" type="checkbox" class="mr-2"> Active
+<!--    <label class="block mb-2 text-sm font-medium mt-4">Status</label>-->
+<!--    <input th:field="*{status}" type="checkbox" class="mr-2"> Active-->
 
     <div class="flex justify-end gap-2 mt-6">
       <button type="button" id="cancelBtn" class="px-4 py-2 border cursor-pointer rounded border-gray-300 hover:bg-gray-100">Cancel</button>

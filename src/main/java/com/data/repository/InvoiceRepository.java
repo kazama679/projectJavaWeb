@@ -10,6 +10,7 @@ public interface InvoiceRepository {
     Invoice findById(int id);
     List<Invoice> findAll();
     boolean save(Invoice invoice);
+    List<Invoice> findPage(int page, int size);
     boolean update(Invoice invoice);
     List<Invoice> searchByCustomerName(String name);
     List<Invoice> searchByCreatedDate(Date date);

@@ -18,6 +18,11 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public List<Customer> findPage(int page, int size) {
+        return customerRepository.findPage(page, size);
+    }
+
+    @Override
     public Customer findById(int id) {
         return customerRepository.findById(id);
     }

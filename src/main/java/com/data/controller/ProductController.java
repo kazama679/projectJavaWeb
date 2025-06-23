@@ -31,6 +31,8 @@ public class ProductController {
 
     @GetMapping("/products")
     public String list(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "brand", required = false) String brand,
             @RequestParam(value = "stock", required = false) Integer stock,
             @RequestParam(value = "min", required = false) Double min,
@@ -38,22 +40,34 @@ public class ProductController {
             HttpSession session,
             Model model
     ) {
-//        if (session.getAttribute("admin") == null) {
-//            return "redirect:/login";
-//        }
-        List<Product> allProducts;
+        List<Product> filteredProducts;
+
         if (brand != null && !brand.trim().isEmpty()) {
-            allProducts = productService.findByBrand(brand);
+            filteredProducts = productService.findByBrand(brand);
         } else if (stock != null) {
-            allProducts = productService.findByStock(stock);
+            filteredProducts = productService.findByStock(stock);
         } else if (min != null && max != null) {
-            allProducts = productService.findByPriceRange(min, max);
+            filteredProducts = productService.findByPriceRange(min, max);
         } else {
-            allProducts = productService.findAll();
+            filteredProducts = productService.findAll();
         }
 
-        model.addAttribute("products", allProducts);
+        int totalProducts = filteredProducts.size();
+        int totalPages = (int) Math.ceil((double) totalProducts / size);
+        if (totalPages == 0) totalPages = 1;
+
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, totalProducts);
+        List<Product> paginatedProducts = filteredProducts.subList(start, end);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("products", paginatedProducts);
         model.addAttribute("productDTO", new ProductDTO());
+
         model.addAttribute("brand", brand);
         model.addAttribute("stock", stock);
         model.addAttribute("min", min);

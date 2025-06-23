@@ -12,13 +12,11 @@
     <div class="bg-white rounded-lg shadow-lg w-[900px] max-w-full p-4">
         <div class="flex justify-between items-center p-4">
             <h2 class="text-lg font-semibold">Add Invoice detail</h2>
-            <!-- Hiển thị lỗi nếu có -->
-<!--            <div th:if="${error}" class="text-red-600 font-semibold px-4 py-2">-->
-<!--                <i class="fa-solid fa-circle-exclamation mr-1"></i>-->
-<!--                <span th:text="${error}"></span>-->
-<!--            </div>-->
-
             <a href="/invoices/add" class="text-gray-500 hover:text-red-500 text-xl cursor-pointer">×</a>
+        </div>
+        <div th:if="${error}" class="text-red-600 font-semibold pb-2 flex justify-center items-center">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i>
+            <span th:text="${error}"></span>
         </div>
 
         <div class="overflow-x-auto max-h-[400px] overflow-y-auto p-4">
@@ -26,7 +24,7 @@
                 <thead class="bg-gray-100 text-gray-700">
                 <tr>
                     <th class="p-3 text-center">
-                        <input type="checkbox" class="cursor-pointer" onclick="toggleAllCheckboxes(this)" />
+<!--                        <input type="checkbox" class="cursor-pointer" onclick="toggleAllCheckboxes(this)" />-->
                     </th>
                     <th class="p-3">STT</th>
                     <th class="p-3">Product Name</th>
@@ -46,7 +44,7 @@
                     <td th:text="${p.name}" class="p-3">Shoe</td>
                     <td th:text="${p.brand}" class="p-3">Balenciaga</td>
                     <td class="p-3 text-center">
-                        <input type="number" name="quantities" th:value="${p.quantity}" class="w-16 border rounded px-2 py-1 text-center" />
+                        <input type="number" min="1" name="quantities" th:value="${p.quantity}" class="w-16 border rounded px-2 py-1 text-center" />
                     </td>
                     <td th:text="${p.price}" class="p-3">1,222200 $</td>
                 </tr>
@@ -63,18 +61,18 @@
 </div>
 </body>
 <script>
-    const masterCheckbox = document.querySelector('input[onclick="toggleAllCheckboxes(this)"]');
-    const checkboxes = document.querySelectorAll('input[name="productIds"]');
-
-    function toggleAllCheckboxes(master) {
-        checkboxes.forEach(cb => cb.checked = master.checked);
-    }
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', function () {
-            const allChecked = [...checkboxes].every(c => c.checked);
-            masterCheckbox.checked = allChecked;
-        });
-    });
+    // const masterCheckbox = document.querySelector('input[onclick="toggleAllCheckboxes(this)"]');
+    // const checkboxes = document.querySelectorAll('input[name="productIds"]');
+    //
+    // function toggleAllCheckboxes(master) {
+    //     checkboxes.forEach(cb => cb.checked = master.checked);
+    // }
+    //
+    // checkboxes.forEach(cb => {
+    //     cb.addEventListener('change', function () {
+    //         const allChecked = [...checkboxes].every(c => c.checked);
+    //         masterCheckbox.checked = allChecked;
+    //     });
+    // });
 </script>
 </html>

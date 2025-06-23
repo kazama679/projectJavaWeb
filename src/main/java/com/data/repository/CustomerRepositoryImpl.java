@@ -25,6 +25,16 @@ public class CustomerRepositoryImpl implements CustomerRepository{
     }
 
     @Override
+    public List<Customer> findPage(int page, int size) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Customer order by id", Customer.class)
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
+        }
+    }
+
+    @Override
     public Customer findById(int id) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(Customer.class, id);

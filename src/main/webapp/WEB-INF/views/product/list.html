@@ -91,25 +91,25 @@
     </table>
   </div>
 
-<!--  <div class="mt-4 flex justify-end items-center space-x-1">-->
-<!--    <a th:if="${currentPage > 1}"-->
-<!--       th:href="@{/products(page=${currentPage - 1}, searchProduct=${searchProduct})}"-->
-<!--       class="px-[9.5px] py-[4.2px] border border-gray-300 rounded hover:bg-gray-200 cursor-pointer">-->
-<!--      <i class="fa-solid fa-arrow-left"></i>-->
-<!--    </a>-->
+  <div class="mt-4 flex justify-end items-center space-x-1">
+    <a th:href="@{/products(page=${currentPage - 1})}"
+       th:classappend="${currentPage == 1} ? ' pointer-events-none opacity-50' : ''"
+       class="px-[9.5px] py-[4.2px] border rounded hover:bg-gray-200 cursor-pointer">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
 
-<!--    <span th:each="i : ${#numbers.sequence(1, totalPages)}">-->
-<!--    <a th:href="@{/products(page=${i}, searchProduct=${searchProduct})}"-->
-<!--       th:class="'px-3 py-[5.4px] border border-gray-300 rounded hover:bg-gray-200 cursor-pointer ' + (${i} == ${currentPage} ? 'bg-orange-500 text-white' : '')"-->
-<!--       th:text="${i}">1</a>-->
-<!--    </span>-->
+    <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{/products(page=${pageNum})}"
+               th:class="'px-3 py-[5.4px] border rounded cursor-pointer hover:bg-gray-200 ' + (${pageNum} == ${currentPage} ? 'bg-orange-500 border-orange-500 text-white' : '')"
+               th:text="${pageNum}"></a>
+        </span>
 
-<!--    <a th:if="${currentPage < totalPages}"-->
-<!--       th:href="@{/products(page=${currentPage + 1}, searchProduct=${searchProduct})}"-->
-<!--       class="px-[9.5px] py-[4.2px] border rounded border-gray-300 hover:bg-gray-200 cursor-pointer">-->
-<!--      <i class="fa-solid fa-arrow-right"></i>-->
-<!--    </a>-->
-<!--  </div>-->
+    <a th:href="@{/products(page=${currentPage + 1})}"
+       th:classappend="${currentPage == totalPages} ? ' pointer-events-none opacity-50' : ''"
+       class="px-[9.5px] py-[4.2px] border rounded hover:bg-gray-200 cursor-pointer">
+      <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
 
 </main>
 

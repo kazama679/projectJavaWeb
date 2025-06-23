@@ -29,6 +29,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public List<Invoice> findPage(int page, int size) {
+        return invoiceRepository.findPage(page, size);
+    }
+
+    @Override
     public boolean update(Invoice invoice) {
         return invoiceRepository.update(invoice);
     }

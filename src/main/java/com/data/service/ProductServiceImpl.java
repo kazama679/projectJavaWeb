@@ -23,6 +23,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAllStatusTrue() {
+        return productRepository.findAllStatusTrue();
+    }
+
+    @Override
     public Product findById(int id) {
         return productRepository.findById(id);
     }
@@ -35,6 +40,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean update(Product product) {
         return productRepository.save(product);
+    }
+
+    @Override
+    public List<Product> findPage(int page, int size) {
+        return productRepository.findPage(page, size);
     }
 
     @Override

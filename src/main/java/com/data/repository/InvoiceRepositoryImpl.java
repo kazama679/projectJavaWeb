@@ -27,6 +27,16 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
+    public List<Invoice> findPage(int page, int size) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Invoice order by id", Invoice.class)
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
+        }
+    }
+
+    @Override
     public List<Invoice> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Invoice order by id", Invoice.class).getResultList();

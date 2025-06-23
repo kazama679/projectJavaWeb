@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,12 +21,18 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("/customers")
-    public String list(HttpSession session, Model model) {
-//        if (session.getAttribute("admin") == null) {
-//            return "redirect:/login";
-//        }
-        List<Customer> customers = customerService.findAll();
+    public String list(@RequestParam(value = "page", defaultValue = "1") int page,
+                       @RequestParam(value = "size", defaultValue = "5") int size,
+                       Model model) {
+        int totalCustomers = customerService.findAll().size();
+        int totalPages = (int) Math.ceil((double) totalCustomers / size);
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+
+        List<Customer> customers = customerService.findPage(page, size);
         model.addAttribute("customers", customers);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         return "customer/list";
     }
 

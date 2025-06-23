@@ -1,5 +1,6 @@
 package com.data.repository;
 
+import com.data.entity.Customer;
 import com.data.entity.Product;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -19,6 +20,26 @@ public class ProductRepositoryImpl implements ProductRepository{
     public List<Product> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Product order by id", Product.class).getResultList();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Product> findPage(int page, int size) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Product order by id", Product.class)
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
+        }
+    }
+
+    @Override
+    public List<Product> findAllStatusTrue() {
+        try(Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Product where status = true order by id", Product.class).getResultList();
         } catch (HibernateException e) {
             e.printStackTrace();
             return null;

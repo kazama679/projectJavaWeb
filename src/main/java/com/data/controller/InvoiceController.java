@@ -7,7 +7,6 @@ import com.data.service.InvoiceDetailService;
 import com.data.service.InvoiceService;
 import com.data.service.ProductService;
 import com.data.ulti.StatusInvoice;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class InvoiceController {
@@ -39,28 +39,48 @@ public class InvoiceController {
     private InvoiceDetailService invoiceDetailService;
 
     @GetMapping("/invoices")
-    public String list(@RequestParam(value = "searchCustomer", required = false) String searchCustomer,
-                       @RequestParam(value = "searchDate", required = false) String searchDate,
-                       Model model, HttpSession session) {
+    public String list(
+            @RequestParam(value = "searchCustomer", required = false) String searchCustomer,
+            @RequestParam(value = "searchDate", required = false) String searchDate,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            Model model,
+            HttpSession session
+    ) {
         session.removeAttribute("invoiceItems");
-        List<Invoice> invoices = invoiceService.findAll();
 
+        List<Invoice> allInvoices = invoiceService.findAll();
         if (searchCustomer != null && !searchCustomer.trim().isEmpty()) {
-            invoices = invoiceService.searchByCustomerName(searchCustomer.trim());
+            allInvoices = invoiceService.searchByCustomerName(searchCustomer.trim());
         } else if (searchDate != null && !searchDate.trim().isEmpty()) {
             try {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 df.setLenient(false);
                 Date parsedDate = df.parse(searchDate.trim());
-                invoices = invoiceService.searchByCreatedDate(parsedDate);
+                allInvoices = invoiceService.searchByCreatedDate(parsedDate);
             } catch (ParseException e) {
                 model.addAttribute("dateError", "Định dạng ngày không hợp lệ (yyyy-MM-dd)");
             }
         }
 
+        int total = allInvoices.size();
+        int totalPages = (int) Math.ceil((double) total / size);
+        if (totalPages == 0) totalPages = 1;
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, total);
+        List<Invoice> paginated = new ArrayList<>();
+        if (start < end) {
+            paginated = allInvoices.subList(start, end);
+        }
+
+        model.addAttribute("invoices", paginated);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("searchCustomer", searchCustomer);
         model.addAttribute("searchDate", searchDate);
-        model.addAttribute("invoices", invoices);
         return "invoice/list";
     }
 
@@ -95,7 +115,9 @@ public class InvoiceController {
 
     @GetMapping("/invoices/add")
     public String add(Model model, HttpSession session) {
-        List<Customer> customers = customerService.findAll();
+        List<Customer> customers = customerService.findAll().stream()
+                .filter(Customer::isStatus)
+                .collect(Collectors.toList());
         model.addAttribute("customers", customers);
 
         // Kiểm tra nếu chưa có khách hàng trong session thì gán khách đầu tiên
@@ -163,7 +185,7 @@ public class InvoiceController {
     @GetMapping("/invoices/add/addDetail")
     public String addDetail(Model model, HttpSession session,
                             @RequestParam(value = "productId", required = false) Integer productId) {
-        List<Product> products = productService.findAll();
+        List<Product> products = productService.findAllStatusTrue();
         List<ProductInvoiceDetailDTO> productInvoiceDetailDTOS = new ArrayList<>();
 
         List<InvoiceItem> invoiceItems = (List<InvoiceItem>) session.getAttribute("invoiceItems");
@@ -204,13 +226,13 @@ public class InvoiceController {
     }
 
     @PostMapping("/invoices/addDetail/save")
-    public String saveInvoiceItems(@RequestParam("productIds") List<Integer> productIds,
-                                   @RequestParam("quantities") List<Integer> quantities,
+    public String saveInvoiceItems(@RequestParam(value = "productIds", required = false) List<Integer> productIds,
+                                   @RequestParam(value = "quantities", required = false) List<Integer> quantities,
                                    HttpSession session, Model model) {
-//        if (productIds == null || productIds.isEmpty()) {
-//            model.addAttribute("error", "Vui lòng chọn ít nhất một sản phẩm!");
-//            return addDetail(model, session, null);
-//        }
+        if (productIds == null || productIds.isEmpty()) {
+            model.addAttribute("error", "Vui lòng chọn ít nhất một sản phẩm!");
+            return addDetail(model, session, null);
+        }
         List<Product> allProducts = productService.findAll();
         List<InvoiceItem> invoiceItems = new ArrayList<>();
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface CustomerService {
     List<Customer> findAll();
+    List<Customer> findPage(int page, int size);
     Customer findById(int id);
     boolean save(Customer customer);
     boolean update(Customer customer);
