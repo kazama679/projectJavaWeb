@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -88,32 +89,35 @@ public class InvoiceController {
     }
 
     @GetMapping("/invoices/show")
-    public String show(Model model, @RequestParam("id") int id) {
+    public String show(Model model, @RequestParam("id") int id, HttpServletRequest request) {
         List<InvoiceDetail> invoiceDetails = invoiceDetailService.findAllByIdInvoice(id);
         model.addAttribute("invoiceDetails", invoiceDetails);
+        model.addAttribute("back", request.getHeader("Referer"));
         return "invoice/show";
     }
 
     @GetMapping("/invoices/edit")
-    public String edit(Model model, @RequestParam("id") int id) {
+    public String edit(Model model, @RequestParam("id") int id, HttpServletRequest request) {
         Invoice invoice = invoiceService.findById(id);
         List<InvoiceDetail> invoiceDetails = invoiceDetailService.findAllByIdInvoice(id);
 
         model.addAttribute("invoice", invoice);
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("statuses", StatusInvoice.values());
+        model.addAttribute("back", request.getHeader("Referer"));
         return "invoice/edit";
     }
 
     @PostMapping("/invoices/updateStatus")
     public String updateStatus(@RequestParam("id") int id,
-                               @RequestParam("status") StatusInvoice status) {
+                               @RequestParam("status") StatusInvoice status,
+                               @RequestParam(value = "backUrl", required = false) String backUrl) {
         Invoice invoice = invoiceService.findById(id);
         if (invoice != null) {
             invoice.setStatus(status);
             invoiceService.update(invoice);
         }
-        return "redirect:/invoices";
+        return "redirect:" + (backUrl != null ? backUrl : "/invoices");
     }
 
     @GetMapping("/invoices/add")
@@ -239,14 +243,12 @@ public class InvoiceController {
         List<Product> allProducts = productService.findAll();
         List<InvoiceItem> invoiceItems = new ArrayList<>();
 
-        for (int i = 0; i < productIds.size(); i++) {
-            int id = productIds.get(i);
-            int quantity = quantities.get(i);
-            Product product = allProducts.stream()
-                    .filter(p -> p.getId() == id)
-                    .findFirst()
-                    .orElse(null);
-            if (product != null) {
+        for (int i = 0; i < allProducts.size(); i++) {
+            Product product = allProducts.get(i);
+            int productId = product.getId();
+            if (productIds.contains(productId)) {
+                int index = allProducts.indexOf(product);
+                int quantity = quantities.get(i);
                 invoiceItems.add(new InvoiceItem(product, quantity));
             }
         }
