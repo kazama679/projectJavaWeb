@@ -47,6 +47,9 @@ public class InvoiceController {
             Model model,
             HttpSession session
     ) {
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/login";
+        }
         session.removeAttribute("invoiceItems");
 
         List<Invoice> allInvoices = invoiceService.findAll();

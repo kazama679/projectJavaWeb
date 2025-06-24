@@ -40,6 +40,9 @@ public class ProductController {
             HttpSession session,
             Model model
     ) {
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/login";
+        }
         List<Product> filteredProducts;
 
         if (brand != null && !brand.trim().isEmpty()) {

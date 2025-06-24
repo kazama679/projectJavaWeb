@@ -68,9 +68,9 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
-//        if (session.getAttribute("admin") == null) {
-//            return "redirect:/login";
-//        }
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("customers", customerService.findAll().size());
         model.addAttribute("products", productService.findAll().size());
         model.addAttribute("invoiceNumber", invoiceService.findAll().size());

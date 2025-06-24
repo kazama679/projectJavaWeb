@@ -16,11 +16,9 @@
                placeholder="Please enter your username ..."
                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                th:classappend="${errorUsername} ? 'border-red-500 mb-[2px]' : 'border-gray-300'"
-               value="admin"
         />
         <p th:if="${errorUsername}" th:text="${errorUsername}" class="text-red-500 text-xs"></p>
-        <input
-                value="admin" type="password" name="password" placeholder="Please enter your password ..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" th:classappend="${errorPassword} ? 'border-red-500 mb-[2px]' : 'border-gray-300'"/>
+        <input type="password" name="password" placeholder="Please enter your password ..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" th:classappend="${errorPassword} ? 'border-red-500 mb-[2px]' : 'border-gray-300'"/>
         <p th:if="${errorPassword}" th:text="${errorPassword}" class="text-red-500 text-xs"></p>
         <div class="flex items-center justify-between text-sm text-gray-600">
             <label class="flex items-center">
